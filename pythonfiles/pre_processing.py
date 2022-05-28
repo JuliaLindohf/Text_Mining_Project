@@ -36,7 +36,7 @@ for product in productsData1: #for each line in the json file
     Book_Reviews.append(product["reviewText"]) 
     Review_summary.append(product["summary"] )
 
-    #now making the sentiment analysis label. We can say that if the rating of a review is above 3, so the sentiment of review is positive, else, the sentiment is negative.
+    
     if product["overall"] > 3:
         Book_Sentiment.append("positive")
     else:
@@ -50,7 +50,6 @@ for product in productsData2: #for each line in the json file
     Book_Reviews.append(product["reviewText"]) 
     Review_summary.append(product["summary"] )
 
-    #now making the sentiment analysis label. We can say that if the rating of a review is above 3, so the sentiment of review is positive, else, the sentiment is negative.
     if product["overall"] > 3:
         Book_Sentiment.append("positive")
     else:
@@ -59,3 +58,10 @@ for product in productsData2: #for each line in the json file
 # a new panda dataframe 
 datalist = {'Reader_Summary': Review_summary, 'Review_Text': Book_Reviews, 'Sentiments': Book_Sentiment}
 Booksentiment_ratings = pd.DataFrame(datalist) 
+
+# to divide the dataframe into two separate dataframes for futural analysis 
+# the positive reviews 
+dataframe_positive = Booksentiment_ratings[Booksentiment_ratings['Sentiments']=='positive']
+
+# the negative reviews 
+dataframe_negative = Booksentiment_ratings[Booksentiment_ratings['Sentiments']!='positive'] 
