@@ -3,6 +3,8 @@ import pandas as pd
 import spacy
 from spacy.lang.en import English 
 import json 
+import pyspark
+
 
 # the code was given by http://snap.stanford.edu/data/ 
 !wget http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Kindle_Store_5.json.gz
@@ -11,15 +13,20 @@ import json
 !wget http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Kindle_Store.json.gz
 !gzip -d reviews_Kindle_Store.json
 
-!wget http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Movies_and_TV.json.gz
-!gzip -d reviews_Movies_and_TV.json 
+!wget http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Movies_and_TV_10.json.gz
+!gzip -d 	reviews_Movies_and_TV_10.json.gz
 
-# to create a dataframe which stores all Kindle reviews 
+# to create the first dataframe which stores all Kindle reviews 
 f1 = open("/content/reviews_Kindle_Store_5.json", "r")
 productsData1 = [json.loads(line) for line in f1.readlines()]
 
+# to create the second dataframe which stores all Kindle reviews 
 f2 = open("/content/reviews_Kindle_Store.json", "r")
-productsData2 = [json.loads(line) for line in f2.readlines()] 
+productsData2 = [json.loads(line) for line in f2.readlines()]  
+
+# to create a dataframe which stores the downloaded movie reviews
+f3 = open("/content/reviews_Movies_and_TV_10.json", "r")
+movieData = [json.loads(line) for line in f3.readlines()]  
 
 # to merge two dataframes into one. 
 
