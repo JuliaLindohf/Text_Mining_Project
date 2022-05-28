@@ -72,3 +72,35 @@ dataframe_positive = Booksentiment_ratings[Booksentiment_ratings['Sentiments']==
 
 # the number of negative reviews is 776455
 dataframe_negative = Booksentiment_ratings[Booksentiment_ratings['Sentiments']!='positive'] 
+
+
+# Movie Reviews
+# to create a new dataframe, two categories, the sentiments and the reviews 
+Movie_Sentiment = [ ] 
+Movie_Reviews = [ ]  
+Movie_summary = [ ]
+
+for product in movieData: #for each line in the json file
+    #if the review is empty, ignore that line
+    if product["reviewText"] == "":  
+        continue
+    # to append one more reviews in the list
+    Movie_Reviews.append(product["reviewText"]) 
+    Movie_summary.append(product["summary"] )
+
+    #now making the sentiment analysis label. We can say that if the rating of a review is above 3, so the sentiment of review is positive, else, the sentiment is negative.
+    if product["overall"] > 3:
+        Movie_Sentiment.append("positive")
+    else:
+        Movie_Sentiment.append("negative")
+        
+# a new panda dataframe 
+datalist2 = {'Cinephiles_Summary': Movie_summary, 'Review_Text': Movie_Reviews, 'Sentiments': Movie_Sentiment}
+Moviesentiment_ratings = pd.DataFrame(datalist2) 
+
+# the number of positive reviews is 711729
+positive_movies = Moviesentiment_ratings[Moviesentiment_ratings['Sentiments']=='positive'] 
+
+# the number of negative reviews is 247223
+negative_movies = Moviesentiment_ratings[Moviesentiment_ratings['Sentiments']!='positive']  
+
