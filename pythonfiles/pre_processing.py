@@ -60,8 +60,8 @@ datalist = {'Reader_Summary': Review_summary, 'Review_Text': Book_Reviews, 'Sent
 Booksentiment_ratings = pd.DataFrame(datalist) 
 
 # to divide the dataframe into two separate dataframes for futural analysis 
-# the positive reviews 
+# the number of positive reviews is 3411436
 dataframe_positive = Booksentiment_ratings[Booksentiment_ratings['Sentiments']=='positive']
 
-# the negative reviews 
+# the number of negative reviews is 776455
 dataframe_negative = Booksentiment_ratings[Booksentiment_ratings['Sentiments']!='positive'] 
