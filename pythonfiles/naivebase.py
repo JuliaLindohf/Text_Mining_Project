@@ -5,6 +5,10 @@ import json
 import nltk
 from spacy.lang.en import English 
 
+# the object class is based on the lecture contents, as well as the exercises from Coursera's
+# natural language processing specialisation 
+# a number of variations are included however 
+
 class training_model_naivebase:
   # to create a dictionary which stores the likelihood of every word 
   def __init__(self, X_train, y_train): 
@@ -102,6 +106,4 @@ class training_model_naivebase:
       p_other = (p_combination2+1)/(nr_others + Ldict)  
 
       pword[word] = np.log(p_review/p_other) 
-
-
       return prior, pword 
