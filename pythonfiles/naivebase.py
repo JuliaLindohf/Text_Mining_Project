@@ -119,6 +119,65 @@ class training_model_naivebase:
     return prior, pword 
 
   
+# training and prediction
+class Prediction_Evaluation:
+  # To predict which text chunk is a book review 
+  def __init__(self, x_test, y_test, prior, pword): 
+    self.textchunk = x_test
+    self.result = y_test 
+    self.priorfunction = prior 
+    self.pdictionary = pword
+    # to create an empty list, to store all words
+    self.allwords = [ ]
+
+  def clearntextchunks(self): 
+    # to clean text data
+    # to stripe away all unnecessary digits, punctuations and other contaiminations
+    newtrainingdata = []   
+    nlp = spacy.load('en_core_web_sm')  
+    for td in self.textchunk: 
+      doc = nlp(td) 
+      sentence = [ ]
+      for token in doc:
+        if token.is_alpha: 
+          # to take away all stop words 
+          if not token.is_stop:
+            # all words are in lower case 
+            tempword = token.lemma_.lower()
+            sentence.append(tempword)
+            self.allwords.append(tempword)
+      newtrainingdata.append(sentence)
+    return newtrainingdata
+
+  def predictachunk(self, textchunk): 
+    # to use the training model to predict 
+    # the input data should be cleaned dataset 
+    # the initial likelihood is the prior function 
+    ptextchunk = self.priorfunction  
+    for word in textchunk: 
+      if word in self.pdictionary: 
+        ptextchunk += self.pdictionary[word]  
+    if ptextchunk > 0:
+      result = 1
+    else: 
+      result = -1 
+    return result 
+
+  def predictlist(self):
+    # to create a list to store result  
+    predict_result = [ ]
+
+    # to clean the text data 
+    cleantextdata = self.clearntextchunks( ) 
+
+    for textdata in cleantextdata: 
+      newresult = self.predictachunk(textdata) 
+      predict_result.append(newresult) 
+
+    facit = self.result
+
+    print(classification_report(facit, predict_result)) 
+    print(confusion_matrix(facit, predict_result))   
   
 # to split the data set, to begin with to select the test data
 X_rest, X_test, y_rest, y_test = train_test_split(X, Y, test_size=0.2, shuffle=True)
