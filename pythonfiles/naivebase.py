@@ -60,8 +60,10 @@ class training_model_naivebase:
 
   def training_model(self): 
     # to calculate likelihood of every word in the dictionary  
-    freq_dict = self.frequency_count( )
-    wordlist = self.uniquewords( ) 
+    self.frequency_count( )
+    freq_dict = self.worddict 
+    self.uniquewords( ) 
+    wordlist = self.uniquewords
 
     # to create an empty dictionary, to store the likelihood of each word 
     pword = { }
@@ -70,7 +72,7 @@ class training_model_naivebase:
     prior = 0 
 
     # the number of unique words 
-    Lwords = len( wordlist)
+    Lwords = len(wordlist)
     # the size of the dictionary 
     Ldict = len(freq_dict)
 
@@ -92,8 +94,9 @@ class training_model_naivebase:
       else: 
         freq = 0
       return freq
-
-    for word in wordlist: 
+    Lwordlist = len(wordlist)
+    for i in range(Lwordlist): 
+      word = wordlist[i]
       # two combinations should be examined 
       combination1 = (word, 1) 
       p_combination1 = lookforwords(freq_dict, combination1) 
@@ -106,4 +109,4 @@ class training_model_naivebase:
       p_other = (p_combination2+1)/(nr_others + Ldict)  
 
       pword[word] = np.log(p_review/p_other) 
-      return prior, pword 
+    return prior, pword 
