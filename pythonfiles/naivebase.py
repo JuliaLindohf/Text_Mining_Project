@@ -183,3 +183,22 @@ class Prediction_Evaluation:
 X_rest, X_test, y_rest, y_test = train_test_split(X, Y, test_size=0.2, shuffle=True)
 # to select both the training and validation test data
 X_train, X_val, y_train, y_val = train_test_split(X_rest, y_rest, test_size=0.15, shuffle=True)
+
+
+# Three rounds of classifications: 
+
+# creating a training model 
+model1 = training_model_naivebase(X_train, y_train )
+prior, pword = model1.training_model()
+
+# prediction, test data 
+model2 = Prediction_Evaluation(X_test, y_test, prior, pword)
+model2.predictlist()
+
+# prediction, validation data 
+model3 = Prediction_Evaluation(X_val, y_val, prior, pword)
+model3.predictlist() 
+
+# prediction, training data 
+model4 = Prediction_Evaluation(X_train, y_train, prior, pword)
+model4.predictlist() 
