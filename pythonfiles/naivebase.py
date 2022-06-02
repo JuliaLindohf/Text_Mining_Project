@@ -8,6 +8,8 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from sklearn.model_selection import train_test_split
 from nltk.corpus import stopwords
 nltk.download('stopwords')
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
 
 # the object class is based on the lecture contents, as well as the exercises from Coursera's
