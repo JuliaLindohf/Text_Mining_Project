@@ -3,7 +3,12 @@ import pandas as pd
 import spacy
 import json 
 import nltk
-from spacy.lang.en import English 
+from spacy.lang.en import English
+from nltk.tokenize import sent_tokenize, word_tokenize
+from sklearn.model_selection import train_test_split
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
 
 # the object class is based on the lecture contents, as well as the exercises from Coursera's
 # natural language processing specialisation 
@@ -110,3 +115,10 @@ class training_model_naivebase:
 
       pword[word] = np.log(p_review/p_other) 
     return prior, pword 
+
+  
+  
+# to split the data set, to begin with to select the test data
+X_rest, X_test, y_rest, y_test = train_test_split(X, Y, test_size=0.2, shuffle=True)
+# to select both the training and validation test data
+X_train, X_val, y_train, y_val = train_test_split(X_rest, y_rest, test_size=0.15, shuffle=True)
