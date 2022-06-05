@@ -14,11 +14,10 @@ import re
 import matplotlib.pyplot as plt
 import seaborn as sns 
 
-
 class phrase_freq:
-  def __init__(self, inputframe, column): 
+  def __init__(self, inputframe): 
     self.originaldf = inputframe
-    self.reviewlist= inputframe[column].tolist()
+    self.reviewlist= inputframe['Review_Text'].tolist()
     self.cleanedtext = [ ]
     # to create an empty dictionary to store words 
     self.worddict= { } 
@@ -31,19 +30,25 @@ class phrase_freq:
   def Wordcounts(self):  
     reviewlist = self.reviewlist 
     nlp = spacy.load('en_core_web_sm') 
+    # to create a new dictionary, to store the 2 grams 
+    twogram = {} 
 
     def ngrams(inputlist, n, dictngram): 
         # to collect ngrams 
         L = len(inputlist)
         # to fetch ngrams from the input list 
-        ngrams = [inputlist[i:i+n] for i in range(L-n+1)] 
-
+        if n ==2:
+          ngrams =[ (inputlist[i], inputlist[i+1]) for i in range(L-n+1)]  
+        if n == 3: 
+          ngrams =[ (inputlist[i], inputlist[i+1], inputlist[i+2]) for i in range(L-n+1)]  
+        if n == 4: 
+          ngrams =[ (inputlist[i], inputlist[i+1], inputlist[i+2], inputlist[i+3]) for i in range(L-n+1)]  
         # to store ngrams in the list 
         for detectedngrams in ngrams:
-          if detectedngrams not in dictngram: 
-            dictngram[ detectedngrams ] = 1
+          if detectedngrams in dictngram: 
+            dictngram[detectedngrams] += 1
           else: 
-            dictngram[ detectedngrams ] += 1
+            dictngram[detectedngrams] = 1
 
         return dictngram 
 
@@ -54,17 +59,17 @@ class phrase_freq:
       for word in doc:
         if word.is_alpha:
           word2 = word.lemma_.lower() 
+          if word2 == '-pron-':
+            continue  
           texttokens.append(word2)
           if word2 in self.worddict: 
             self.worddict[word2] += 1
           else: 
             self.worddict[word2] = 1
-      
-      self.twograms = ngrams(self.reviewlist, 2, self.twograms) 
-      self.threegrams = ngrams(self.reviewlist, 3, self.threegrams) 
-      self.fourgrams = ngrams(self.reviewlist, 4, self.fourgrams)  
+      self.twograms = ngrams(texttokens, 2, self.twograms) 
+      self.threegrams = ngrams(texttokens, 3, self.threegrams)  
+      self.fourgrams = ngrams(texttokens, 4, self.fourgrams)  
 
-    return self.worddict 
   def Entity_survey(self): 
     reviewlist = self.reviewlist 
     nlp = spacy.load('en_core_web_sm')  
@@ -87,3 +92,4 @@ class phrase_freq:
             dictentity[temp_text] += 1
           self.entitysurvey[temp_label] = dictentity
       return self.entitysurvey 
+    
