@@ -16,9 +16,9 @@ import seaborn as sns
 
 
 class phrase_freq:
-  def __init__(self, inputframe): 
+  def __init__(self, inputframe, column): 
     self.originaldf = inputframe
-    self.reviewlist= inputframe['Review_Text'].tolist()
+    self.reviewlist= inputframe[column].tolist()
     self.cleanedtext = [ ]
     # to create an empty dictionary to store words 
     self.worddict= { } 
