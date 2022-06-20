@@ -78,6 +78,7 @@ class phrase_freq:
 
       # to extract entities 
       for entity in doc.ents: 
+        # to take out the labels 
         temp_label = entity.label_
         temp_text = entity.text  
         if temp_label not in self.entitysurvey: 
