@@ -158,6 +158,23 @@ class Skimgram_Detection:
      self.skipgram_count = words_count_dict 
     
 if __name__ == '__main__':
+# to clean the text data: 
+
+def text_clearning(inputfil): 
+  nlp = spacy.load("en_core_web_sm") 
+  cleaned_text_list = [ ]
+  for chunk in inputfil: 
+    doc = nlp(chunk)
+    newlist = [ ] 
+    for token in doc: 
+      if token.is_alpha == np.True_: 
+        if token.is_stop == False: 
+          newtoken = token.lemma_
+          newlist.append(newtoken.lower())
+    cleaned_text_list.append(newlist)
+  return cleaned_text_list
+
+ordlista = text_clearning(newlist) 
   
 # According to the lecture notes
 
