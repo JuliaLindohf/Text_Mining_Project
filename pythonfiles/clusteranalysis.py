@@ -167,7 +167,7 @@ def text_clearning(inputfil):
     doc = nlp(chunk)
     newlist = [ ] 
     for token in doc: 
-      if token.is_alpha == np.True_: 
+      if token.is_alpha == True_: 
         if token.is_stop == False: 
           newtoken = token.lemma_
           newlist.append(newtoken.lower())
