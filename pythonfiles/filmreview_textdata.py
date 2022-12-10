@@ -17,3 +17,6 @@ f = open("reviews_Movies_and_TV_5.json", "r")
 filmData = [json.loads(line) for line in f.readlines()]
 filmreviews = []
 rating = []   
+
+Class Basic_statistics:
+  def __init__(self, inputlist):
