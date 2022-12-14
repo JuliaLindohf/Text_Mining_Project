@@ -94,3 +94,71 @@ class phrase_freq:
           self.entitysurvey[temp_label] = dictentity
       return self.entitysurvey 
     
+class Estimating_N_Grams: 
+  def __init__(self, inputdataframe): 
+    self.dataframe = inputdataframe 
+    self.bookreview = inputdataframe['book review'] 
+    self.rating = inputdataframe['rating'] 
+    self.wordcount = inputdataframe['number of words'] 
+
+  def cleaningdata(self, rating): 
+    nlp = spacy.load('en_core_web_sm')  
+
+    def cleanData(doc, stemming = False):
+      # to include a build function to do text data cleaning 
+      # to check if the words are stop words 
+      tokens = [tokens for tokens in doc if (tokens.is_stop == False)]
+      tokens = [tokens for tokens in tokens if (tokens.is_punct == False)]
+      # to find the stem of the words 
+      final_token = [token.lemma_ for token in tokens]
+      # to put the words together into a pharaphrase again 
+      return " ".join(final_token)
+
+    # to count the number of element 
+    L = len(self.rating)
+    # to store the texts in a list
+    textcollectionlist = []
+
+    for i in range(0, L): 
+      currentrating = self.rating[i] 
+      if currentrating == rating:
+        textcollectionlist = textcollectionlist + self.bookreview[i].split()
+    # to clearn the entire data 
+    # the intention is to use the entire corpus for text mining later 
+    newtest = ' '.join(textcollectionlist) 
+    self.cleaned_text = cleanData(newtest)
+
+  def find_twograms(self, rating): 
+    # to fetch the cleaned data 
+    cleaneddata = self.cleaningdata(rating) 
+    # to save the results in a dictionary 
+    twogram_dict = {} 
+    twogram_set = set()
+    for list1 in cleaneddata:
+      list2 = list1.split() 
+      ngramlist = [(list2[l], list2[l+1])   for l in range(0, len(list2)-1)] 
+      for ngram in ngramlist: 
+        if ngram not in twogram_dict:
+          twogram_dict[ngram] = 1
+          twogram_set.add(ngram)
+        else: 
+          twogram_dict[ngram] += 1
+    return twogram_dict, twogram_set 
+
+
+  def find_threegrams(self, rating): 
+    # to fetch the cleaned data 
+    cleaneddata = self.cleaningdata(rating) 
+    # to save the results in a dictionary 
+    threegram_dict = {} 
+    threegram_set = set()
+    for list1 in cleaneddata:
+      list2 = list1.split() 
+      ngramlist = [(list2[l], list2[l+1], list2[l+2]) for l in range(0, len(list2)-2)]  
+      for ngram in ngramlist: 
+        if ngram not in threegram_dict:
+          threegram_dict[ngram] = 1
+          threeram_set.add(ngram)
+        else: 
+          threegram_dict[ngram] += 1
+    return threegram_dict, threegram_set 
