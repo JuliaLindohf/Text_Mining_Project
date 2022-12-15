@@ -13,3 +13,43 @@ from nltk.corpus import stopwords
 from gensim.models import Word2Vec
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
+
+
+# kmeans clusterings 
+class KmeansClustering:
+  def __init__(self, inputlist1, reviewlist): 
+    self.inputlist = inputlist1
+    # the second list contains all review sentences 
+    # to store this variable as an object variable     
+    self.referencelist = reviewlist
+  def cluster_optimisation(self): 
+    # word to vec encoding
+    model = Word2Vec(self.referencelist, min_count=1) 
+    wordlist = []
+    newwordlist = []
+    model = Word2Vec(newlist, min_count=1) 
+    word_vector_list = [] 
+    for word in self.inputlist:
+      newwordvector = model[word]
+      word_vector_list.append(newwordvector)
+    # to implement a distance calculation function: 
+    similarity_matrix = cosine_similarity(word_vector_list)
+    # to store within-cluster sum-of-squares 
+    wcss = []
+    for n_clusters in range(1, 11):
+      kmeans = KMeans(n_clusters=n_clusters) 
+      kmeans.fit(similarity_matrix) 
+      wcss.append(kmeans.inertia_) 
+    plt.figure(figsize=(15, 10))  
+    plt.plot(range(1, 11), wcss)
+    plt.xlabel("Number of clusters", fontsize=20)
+    plt.ylabel("Within-cluster sum-of-squares", fontsize=20)
+    plt.grid(True)
+    plt.show()
+    self.transformed_textdata = similarity_matrix
+  def Kmeanscluster(self, nrclusters): 
+    # to cluster up the words 
+    clusterprediction = KMeans(n_clusters = nrclusters) 
+    # to make the prediction
+    clusterprediction.fix(self.transformed_textdata)
+    self.prediction_labels = clusterprediction.predict(self.transformed_textdata) 
