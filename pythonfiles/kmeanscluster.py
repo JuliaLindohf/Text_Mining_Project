@@ -53,3 +53,17 @@ class KmeansClustering:
     # to make the prediction
     clusterprediction.fix(self.transformed_textdata)
     self.prediction_labels = clusterprediction.predict(self.transformed_textdata) 
+    
+    # to store data in the dictionary
+    self.classdictionary = {}
+    L = len(self.inputlist)
+    for i in range(0, L): 
+      label = self.prediction_labels[i]
+      word = self.inputlist[i]  
+
+      if label not in self.classdictionary:
+        self.classdictionary[label] = [word] 
+      else:
+        wordlist = self.classdictionary[label] 
+        wordlist.append(word) 
+        self.classdictionary[label] = wordlist
