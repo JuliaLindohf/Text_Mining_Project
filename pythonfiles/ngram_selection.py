@@ -69,18 +69,20 @@ class TwoGrams_Extraction:
         else: 
           self.twogram_dict[ngram] += 1 
 
-    def sort_twograms(self, popularity_threshold):
+   def sort_twograms(self, popularity_threshold):
       nlp = spacy.load('en_core_web_sm')   
       # to fetch the most popular noun phrases  
       newdict = {}
       for k,v in self.twogram_dict.items(): 
         if v > popularity_threshold:
           newdict[k] = v 
-      popular_nounphrases = []
+      self.popular_nounphrases = []
+      self.popular_adjectivephrases = []
       for k,v in newdict.items(): 
         newngram = ' '.join(k)
         doc = nlp(newngram) 
         token = newngram[1]
         if token.pos_ == 'NOUN':
-          popular_nounphrases.append(newngram) 
-      return popular_nounphrases
+          self.popular_nounphrases.append(newngram) 
+        if token.pos_ == 'ADJ':
+          self.popular_adjectivephrases.append(newngram) 
