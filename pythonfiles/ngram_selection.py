@@ -53,7 +53,7 @@ class TwoGrams_Extraction:
       listofwords2 = [word.lower() for word in listofwords if word.isalpha()] 
       words = ' '.join(listofwords2) 
       doc = nlp(words) 
-      newlist = [token.lemma_ for token in doc]
+      newlist = [token.lemma_ for token in doc if not token.is_stop]
       return newlist 
 
     for sent in self.reviews:
