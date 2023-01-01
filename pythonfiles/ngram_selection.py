@@ -35,3 +35,52 @@ import seaborn as sns
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+class TwoGrams_Extraction: 
+  def __init__(self, inputlist):
+    # dictionary for twograms 
+    self.twogram_dict={}  
+    self.reviews = inputlist
+    # to store all unique two grams 
+    self.uniquelist = []
+
+  def extract_twogram(self): 
+    # to load nlp package 
+    nlp = spacy.load('en_core_web_sm')   
+
+    def cleanlist(review): 
+      # to split the list into words 
+      listofwords = review.split() 
+      listofwords2 = [word.lower() for word in listofwords if word.isalpha()] 
+      words = ' '.join(listofwords2) 
+      doc = nlp(words) 
+      newlist = [token.lemma_ for token in doc]
+      return newlist 
+
+    for sent in self.reviews:
+      cleanedlist = cleanlist(sent) 
+      LW = len(cleanedlist)
+      ngramlist = [(cleanedlist[l],cleanedlist[l+1])   for l in range(LW-1)]  
+      for ngram in ngramlist:
+        if ngram not in self.uniquelist:
+          self.uniquelist.append(ngram) 
+        if ngram not in self.twogram_dict:
+          # to count the number of two grams 
+          self.twogram_dict[ngram] = 1
+        else: 
+          self.twogram_dict[ngram] += 1 
+
+    def sort_twograms(self, popularity_threshold):
+      nlp = spacy.load('en_core_web_sm')   
+      # to fetch the most popular noun phrases  
+      newdict = {}
+      for k,v in self.twogram_dict.items(): 
+        if v > popularity_threshold:
+          newdict[k] = v 
+      popular_nounphrases = []
+      for k,v in newdict.items(): 
+        newngram = ' '.join(k)
+        doc = nlp(newngram) 
+        token = newngram[1]
+        if token.pos_ == 'NOUN':
+          popular_nounphrases.append(newngram) 
+      return popular_nounphrases
