@@ -72,6 +72,7 @@ class TwoGrams_Extraction:
       nlp = spacy.load('en_core_web_sm')   
       # to fetch the most popular noun phrases  
       newdict = {}
+      # to count the max number of ngrams occurence
       maxk = 0
       for k,v in self.twogram_dict.items(): 
         if k > maxk:
