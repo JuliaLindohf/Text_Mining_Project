@@ -36,14 +36,13 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 class TwoGrams_Extraction: 
-  def __init__(self, inputlist):
+  def __init__(self):
     # dictionary for twograms 
     self.twogram_dict={}  
-    self.reviews = inputlist
     # to store all unique two grams 
     self.uniquelist = []
 
-  def extract_twogram(self): 
+  def extract_twogram(self, inputlist): 
     # to load nlp package 
     nlp = spacy.load('en_core_web_sm')   
 
@@ -56,7 +55,7 @@ class TwoGrams_Extraction:
       newlist = [token.lemma_ for token in doc if not token.is_stop]
       return newlist 
 
-    for sent in self.reviews:
+    for sent in inputlist:
       cleanedlist = cleanlist(sent) 
       LW = len(cleanedlist)
       ngramlist = [(cleanedlist[l],cleanedlist[l+1])   for l in range(LW-1)]  
@@ -69,20 +68,24 @@ class TwoGrams_Extraction:
         else: 
           self.twogram_dict[ngram] += 1 
 
-   def sort_twograms(self, popularity_threshold):
+  def sort_twograms(self, popularity_threshold):
       nlp = spacy.load('en_core_web_sm')   
       # to fetch the most popular noun phrases  
       newdict = {}
+      maxk = 0
       for k,v in self.twogram_dict.items(): 
+        if k > maxk:
+          maxk = k
         if v > popularity_threshold:
           newdict[k] = v 
       self.popular_nounphrases = []
       self.popular_adjectivephrases = []
+      print(maxk) 
       for k,v in newdict.items(): 
         newngram = ' '.join(k)
         doc = nlp(newngram) 
-        token = newngram[1]
+        token = doc[1] 
         if token.pos_ == 'NOUN':
           self.popular_nounphrases.append(newngram) 
         if token.pos_ == 'ADJ':
-          self.popular_adjectivephrases.append(newngram) 
+          self.popular_adjectivephrases.append(newngram)  
