@@ -20,7 +20,8 @@ from tensorflow.keras import backend
 from tensorflow.keras.layers import Layer
 
 class attention(Layer):
-    
+# this chunk of code was written with the basic algoritms which was described in: 
+# https://machinelearningmastery.com/adding-a-custom-attention-layer-to-recurrent-neural-network-in-keras/ 
     def __init__(self, return_sequences=True):
         self.return_sequences = return_sequences
         super(attention, self).__init__()
